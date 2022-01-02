@@ -1,27 +1,28 @@
 package pis.hue2.server;
+
+import pis.hue2.common.Instruction;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 
 public class LaunchServer {
     private ServerSocket serverSocket;
     private Socket clientSocket;
+    public static int maxAnzahlClient = 3;
 
-    private int maxAnzahlClient = 3;
-
-
-    public void serverLaufen(int port) {
-
+    //
+    public void serverLaufen(int portNummer) {
         try {
-            serverSocket = new ServerSocket(port);
-            System.out.println("Server erfolgreich verbunden.\nServer wartet auf einen Client...");
+            serverSocket = new ServerSocket(portNummer);
+            System.out.println("Server erfolgreich verbunden.");
 
             while (true) {
                 if (this.maxAnzahlClient >= 0) {
                     clientSocket = serverSocket.accept();
+                    new ClientThread(clientSocket, (-this.maxAnzahlClient + 4)).start();
 
-                    System.out.println("Neue Verbindung mit Client CL00" + (-this.maxAnzahlClient + 4) + " bei " + "localhost"+ clientSocket.getLocalAddress());
-                    System.out.println("Anzahl der Client : " + (-this.maxAnzahlClient + 4));
+                    System.out.println("Neue Verbindung mit Client CL00" + (-this.maxAnzahlClient + 4) + " bei " + "localhost" + clientSocket.getLocalAddress());
 
                     this.maxAnzahlClient--;
                 } else {
@@ -29,8 +30,7 @@ public class LaunchServer {
                     break;
                 }
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             System.out.println(exception);
             System.exit(1);
         }
@@ -39,12 +39,53 @@ public class LaunchServer {
     //Main
     public static void main(String[] args) {
         LaunchServer server = new LaunchServer();
-        server.serverLaufen(7234);
+        server.serverLaufen(5678);
+    }
+
+    public class ClientThread extends Thread {
+
+        private Socket clientSocket;
+        PrintWriter stringOutput;
+        BufferedReader stringInput;
+        private int clientID;
+
+        public ClientThread(Socket clientSocket, int clientID) {
+            this.clientID = clientID;
+            this.clientSocket = clientSocket;
+
+        }
+
+
+        @Override
+        public void run() {
+            try {
+                stringInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String clientInstruction = stringInput.readLine();
+                System.out.println(clientInstruction);
+
+                stringOutput = new PrintWriter(clientSocket.getOutputStream());
+                if (clientInstruction.equals(Instruction.CON.toString())) {
+                    acknowledgement();
+                }
+
+
+            } catch (Exception exception) {
+                System.out.println("KKK");
+                System.exit(1);
+            }
+        }
+
+        public void acknowledgement() {
+
+            try {
+                stringOutput.println(Instruction.ACK.toString());
+                stringOutput.flush();
+                System.out.println("dddd");
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
     }
 
 }
-
-
-
-
-
