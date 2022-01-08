@@ -156,12 +156,9 @@ public class ClientGui {
                 client1 = new LaunchClient(5678);
                 if (jbAufbauen.isEnabled()) {
                     jbAufbauen.setEnabled(false);
-
-            try {
+                    try {
                     //Schick
                     client1.con();
-
-
                         client1.serverAntwort = client1.stringInput.readLine();
 
                         if (client1.serverAntwort.equals(Instruction.ACK.toString())) {
@@ -213,8 +210,32 @@ public class ClientGui {
         jbList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    client1.list();
+                    System.out.println("je tai send lst");
+                    client1.serverAntwort = client1.stringInput.readLine();
+                    if (client1.serverAntwort.equals(Instruction.ACK.toString())){
+                        client1.acknowledgement();
+                        System.out.println("je tai send ack");
+                        if (client1.stringInput.readLine().equals(Instruction.DAT.toString())){
+                            client1.acknowledgement();
+                            System.out.println("je tai send ack 2 ");
 
-                // to Do
+                            String allFileTemp = client1.stringInput.readLine();
+                            String[] allFileTemp2 = allFileTemp.split(" ");
+                            String listAlleDatein = "";
+
+                            for (String listFile : allFileTemp2) {
+                                listAlleDatein += listFile + "\n";
+                            }
+                            System.out.println(listAlleDatein);
+
+                            JOptionPane.showMessageDialog(null,"Folgen" + listAlleDatein);
+                        }
+                    }
+                }catch (Exception e){
+
+                }
             }
         });
 
@@ -222,8 +243,32 @@ public class ClientGui {
         jbPut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    client1.upload();
+                    System.out.println("jai envoyer PUT");
+                    if (client1.stringInput.readLine().equals(Instruction.ACK.toString())){
+                        System.out.println("jai recu ack, je te send alors le fichier ci ?");
+                        client1.data();
 
-                // to Do
+
+                        System.out.println("oooüüep");
+                        if (client1.stringInput.readLine().equals(Instruction.ACK.toString())){
+                            System.out.println("tu as deja ca??? "+fileChoosed.getText());
+                            client1.stringOutput.println(fileChoosed.getText());
+
+                            if (client1.stringInput.readLine().equals(Instruction.DND.toString())){
+                                ergebnis.setText(client1.stringInput.readLine());
+                                System.out.println("tu as barat nor,je nai pas pu de send");
+                            }
+                            else{
+                                System.out.println(" voila ca ooo");
+                                client1.uploadFile(fileChoosed.getText());
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -234,16 +279,42 @@ public class ClientGui {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                // to Do
+
+                try {
+                    client1.download();
+                    System.out.println("jai envoyer get");
+
+                    if (client1.stringInput.readLine().equals(Instruction.ACK.toString())){
+                        client1.acknowledgement();
+
+                        if (client1.stringInput.readLine().equals(Instruction.DAT.toString())){
+                            client1.acknowledgement();
+                            client1.stringOutput.println(fileChoosed.getText());
+
+
+                            if (client1.stringInput.readLine().equals(Instruction.DND.toString())){
+
+                                ergebnis.setText(Instruction.DND.toString());
+                            }
+                            else {
+                                ergebnis.setText(Instruction.DAT.toString());
+                                client1.downloadFile(fileChoosed.getText());
+
+                            }
+
+
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         jbDel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                // to Do
-
+                ergebnis.setText(Instruction.DEL.toString());
             }
         });
 
