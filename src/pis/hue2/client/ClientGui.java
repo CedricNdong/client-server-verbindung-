@@ -157,11 +157,11 @@ public class ClientGui {
                 if (jbAufbauen.isEnabled()) {
                     jbAufbauen.setEnabled(false);
 
-
+            try {
                     //Schick
                     client1.con();
 
-                    try {
+
                         client1.serverAntwort = client1.stringInput.readLine();
 
                         if (client1.serverAntwort.equals(Instruction.ACK.toString())) {
