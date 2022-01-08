@@ -23,8 +23,6 @@ public class LaunchServer {
             serverSocket = new ServerSocket(portNummer);
             System.out.println("Server erfolgreich verbunden.");
 
-            // liste alle Dateien
-
             File[] dataein = new File("./ServerDateien/").listFiles();
             for (File data : dataein) {
                 if (data.isFile()) {
@@ -41,6 +39,7 @@ public class LaunchServer {
 
                     this.maxAnzahlClient--;
                 } else {
+
                     System.out.println("!!! Client wurde abgelehnt !!!\nEs darf nur maximal 3 Clients");
                     break;
                 }
@@ -91,27 +90,106 @@ public class LaunchServer {
                         }
                     }
 
-                    else  {
-                        System.out.println("jai recu disconect");
-                        // ein Client ist weg
-                        maxAnzahlClient--;
-                        disconnect();
-                        System.out.println("tu es deccete");
-                        serverSocket.close();
+                    else if (clientInstruction.equals(Instruction.GET.toString())){
+                        System.out.println("get received");
+                        acknowledgement();
+                        if (stringInput.readLine().equals(Instruction.ACK.toString())){
+                            System.out.println("ack1 received");
+                            data();
+                            if (stringInput.readLine().equals(Instruction.ACK.toString())){
+                                System.out.println("ack2 received");
+                                String dateiName = stringInput.readLine();
+                                System.out.println(dateiName);
 
+                                if (listeAlleDatein.contains(dateiName)){
+
+                                    uploadFile(dateiName);
+                                    System.out.println("get work");
+                                }
+                                else{
+                                    denied();
+                                    System.out.println("get never work");
+                                }
+                            }
+
+
+
+                        }
+
+
+                    }
+                    else if (clientInstruction.equals(Instruction.PUT.toString())){
+                        System.out.println("put received");
+                        acknowledgement();
+
+
+                        if (stringInput.readLine().equals(Instruction.DAT.toString())) {
+                            System.out.println("dat received");
+                            acknowledgement();
+                            System.out.println("icciiiiii");
+
+                            String dateiName = stringInput.readLine();
+                            System.out.println(dateiName);
+                            if (listeAlleDatein.contains(dateiName)) {
+                                denied();
+                                System.out.println("dat never work");
+
+                            }
+                            else {
+                                stringOutput.println("");
+                                downloadFile(dateiName);
+
+                                System.out.println("put work");
+                            }
+
+
+                        }
+
+
+
+
+
+
+                    }
+                    else if (clientInstruction.equals(Instruction.DEL.toString())){
+
+
+                    }
+                    else if (clientInstruction.equals(Instruction.LST.toString())){
+                        acknowledgement();
+                        System.out.println("je suis serveur,tai send ack");
+                        if (stringInput.readLine().equals(Instruction.ACK.toString())){
+                            data();
+                            System.out.println("je tai send dat");
+                            if (stringInput.readLine().equals(Instruction.ACK.toString())){
+                                System.out.println("je tai send les fichier suivant :");
+                                String stringAlleDatein = "";
+
+                                for (String lisD : listeAlleDatein) {
+                                    stringAlleDatein += lisD +" ";
+
+                                }
+
+                                System.out.println(stringAlleDatein);
+
+
+                                stringOutput.println(listeAlleDatein);
+                                stringOutput.flush();
+
+                                stringOutput.println(stringAlleDatein);
+                                stringOutput.flush();
+                            }
+                        }
                     }
 
 
 
-
-
-
-
-
-
-
-
-
+                    else if (clientInstruction.equals(Instruction.DSC.toString())){
+                        System.out.println("jai recu disconect");
+                        disconnect();
+                        System.out.println("tu es deccete");
+                        serverSocket.close();
+                    }
 
             } catch (Exception exception) {
                 System.out.println(exception);
@@ -197,8 +275,6 @@ public class LaunchServer {
             bufferedOutputStream.write(fileToDownload, 0, fileToDownload.length);
             bufferedOutputStream.close();
             listeAlleDatein.add(fileName);
-            // ajouter dans la Allliste le Nom de fichier
         }
-
     }
 }

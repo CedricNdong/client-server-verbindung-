@@ -1,0 +1,7 @@
+Ein Socket (von engl. Sockel, Steckverbindung oder Steckdose) ist ein vom Betriebssystem bereitgestelltes Objekt,
+das als Kommunikationsendpunkt dient. Ein Programm verwendet Sockets, um Daten mit anderen Programmen auszutauschen.
+Das andereProgramm kann sich dabei auf demselben Computer (Interprozesskommunikation)
+oder einem anderen, via Netzwerk erreichbarenComputer befinden. Die Kommunikation über Sockets erfolgt in der
+Regel bidirektional, das heißt, über das Socket können Daten sowohl empfangen als auch gesendet werden.
+
+Quelle : Wikipedia
