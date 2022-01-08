@@ -1,220 +1,259 @@
 package pis.hue2.client;
 
+import pis.hue2.common.Instruction;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.IOException;
+
 
 public class ClientGui {
 
-    public static void main(String[] args) {
+    private LaunchClient client1;
 
-        final File[] fileToSend= new File [1];
 
-        JFrame jframe = new JFrame("GuiClient!!");
+    public ClientGui() {
 
-        jframe.setSize(500,500);
-        jframe.setLayout(new BoxLayout(jframe.getContentPane(),BoxLayout.Y_AXIS));
-        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JLabel jlTitel = new JLabel("Client - Server Connection!!");
-        jlTitel.setFont(new Font("Arial",Font.BOLD,25));
-        jlTitel.setBorder(new EmptyBorder(20,0,10,0));
-        jlTitel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JFrame jframeClient = new JFrame("Client-Server Verbindung");
+
+
+        jframeClient.setSize(500, 550);
+        jframeClient.setLayout(new BoxLayout(jframeClient.getContentPane(), BoxLayout.Y_AXIS));
+        jframeClient.setLocationRelativeTo(null);
+        jframeClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel jpLed = new JPanel();
+        jpLed.setBorder(new EmptyBorder(0, 0, 0, 390));
+
+        JTextArea jbLed = new JTextArea();
+        jbLed.setPreferredSize(new Dimension(35, 35));
+        jbLed.setBackground(Color.green);
+        jbLed.setEditable(false);
+        jbLed.setVisible(false);
+        jpLed.add(jbLed);
+
+        JPanel jpTitel = new JPanel();
+        jpTitel.setBorder(new EmptyBorder(0, 0, 0, 0));
+        JLabel jlTitel = new JLabel("CLIENT");
+        jlTitel.setFont(new Font("Arial", Font.BOLD, 30));
+        jpTitel.add(jlTitel);
 
         JPanel jpButton1 = new JPanel();
-        jpButton1.setBorder(new EmptyBorder(75,0,10,0));
+        jpButton1.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         JButton jbAufbauen = new JButton("Sitzungsaufbau");
-        jbAufbauen.setPreferredSize(new Dimension(150,30));
-        jbAufbauen.setFont(new Font("Arial Narrow",Font.BOLD,15));
+        jbAufbauen.setPreferredSize(new Dimension(200, 60));
+        jbAufbauen.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        jbAufbauen.setBackground(new Color(0x15DC15));
+
 
 
         JButton jbAbbauen = new JButton("Sitzungsabbau");
-        jbAbbauen.setPreferredSize(new Dimension(150,30));
-        jbAbbauen.setFont(new Font("Arial Narrow",Font.BOLD,15));
+        jbAbbauen.setPreferredSize(new Dimension(200, 60));
+        jbAbbauen.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        jbAbbauen.setBackground(new Color(0xEE0540));
+
+
+        JPanel jpText1 = new JPanel();
+        jpText1.setBorder(new EmptyBorder(0, 0, 20, 0));
+
+        JLabel jlTextClient = new JLabel("Vom Server  : ");
+        jlTextClient.setFont(new Font("Arial", Font.BOLD, 20));
+
+        JTextArea ergebnis = new JTextArea();
+        ergebnis.setPreferredSize(new Dimension(220, 50));
+        ergebnis.setLineWrap(true);
+        ergebnis.setEditable(false);
+        jpText1.add(jlTextClient);
+        jpText1.add(ergebnis);
+
+
+
+        JPanel jpText2 = new JPanel();
+        jpText2.setBorder(new EmptyBorder(0, 0, 20, 0));
+
+        JLabel jlTextFileName = new JLabel("Datei Name : ");
+        jlTextFileName.setFont(new Font("Arial", Font.BOLD, 20));
+
+        JTextArea fileChoosed = new JTextArea();
+        fileChoosed.setPreferredSize(new Dimension(220, 50));
+        fileChoosed.setLineWrap(true);
+        jpText2.add(jlTextFileName);
+        jpText2.add(fileChoosed);
 
         ButtonGroup group1 = new ButtonGroup();
-        jpButton1.add(jbAbbauen);
         jpButton1.add(jbAufbauen);
-        group1.add(jbAbbauen);
+        jpButton1.add(jbAbbauen);
         group1.add(jbAufbauen);
-
+        group1.add(jbAbbauen);
 
 
         JPanel jpButton2 = new JPanel();
-        jpButton1.setBorder(new EmptyBorder(75,0,10,0));
+        jpText1.setBorder(new EmptyBorder(0, 0, 40, 0));
 
         JButton jbList = new JButton("LST");
-        jbList.setPreferredSize(new Dimension(80,35));
-        jbList.setFont(new Font("Arial",Font.BOLD,10));
+        jbList.setPreferredSize(new Dimension(80, 35));
+        jbList.setFont(new Font("Arial", Font.BOLD, 10));
 
         JButton jbPut = new JButton("PUT");
-        jbPut.setPreferredSize(new Dimension(80,35));
-        jbPut.setFont(new Font("Arial",Font.BOLD,10));
+        jbPut.setPreferredSize(new Dimension(80, 35));
+        jbPut.setFont(new Font("Arial", Font.BOLD, 10));
+
+        JButton jbDel = new JButton("DELETE");
+        jbDel.setPreferredSize(new Dimension(80, 35));
+        jbDel.setFont(new Font("Arial", Font.BOLD, 10));
 
         JButton jbGet = new JButton("GET");
-        jbGet.setPreferredSize(new Dimension(80,35));
-        jbGet.setFont(new Font("Arial",Font.BOLD,10));
+        jbGet.setPreferredSize(new Dimension(80, 35));
+        jbGet.setFont(new Font("Arial", Font.BOLD, 10));
 
-        JButton jbDel = new JButton("Delete");
-        jbDel.setPreferredSize(new Dimension(80,35));
-        jbDel.setFont(new Font("Arial",Font.BOLD,10));
+
+        jpButton2.setVisible(false);
+        jbAbbauen.setEnabled(false);
+        jpText2.setVisible(false);
+
 
         jpButton2.add(jbList);
         jpButton2.add(jbPut);
         jpButton2.add(jbGet);
         jpButton2.add(jbDel);
 
-        jbGet.addActionListener(new ActionListener() {
+
+
+
+
+
+        JPanel jpCopyRight = new JPanel();
+        jpCopyRight.setBorder(new EmptyBorder(10, 0, 0, 0));
+        JLabel jlCopyRight = new JLabel("\u00a9"+"Copyright Constantin & Cedric");
+        jlCopyRight.setFont(new Font("SansSerif", Font.PLAIN, 15));
+        jpCopyRight.add(jlCopyRight);
+
+
+        jframeClient.add(jpLed);
+        jframeClient.add(jpTitel);
+        jframeClient.add(jpButton1);
+        jframeClient.add(jpText1);
+        jframeClient.add(jpText2);
+        jframeClient.add(jpButton2);
+
+        jframeClient.add(jpCopyRight);
+        jframeClient.setVisible(true);
+
+
+
+
+
+        jbAufbauen.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-
-                JFrame frame = new JFrame("Get File!!");
-
-                frame.setSize(300,300);
-                frame.setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
-
-                JLabel jTitel = new JLabel("Choose a file to download!!");
-                jTitel.setFont(new Font("Arial",Font.BOLD,20));
-                jTitel.setBorder(new EmptyBorder(18,0,8,0));
-                jTitel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-                JPanel jPanel = new JPanel();
-                jPanel.setBorder(new EmptyBorder(75,0,10,0));
-
-                JButton jList = new JButton("YES");
-                jList.setPreferredSize(new Dimension(80,35));
-                jList.setFont(new Font("Arial",Font.BOLD,10));
-
-                JButton jList1 = new JButton("NO");
-                jList1.setPreferredSize(new Dimension(80,35));
-                jList1.setFont(new Font("Arial",Font.BOLD,10));
-
-                jPanel.add(jList);
-                jPanel.add(jList1);
-
-                frame.add(jTitel);
-                frame.add(jPanel);
-                frame.setVisible(true);
+            public void actionPerformed(ActionEvent actionEvent) {
+                client1 = new LaunchClient(5678);
+                if (jbAufbauen.isEnabled()) {
+                    jbAufbauen.setEnabled(false);
 
 
+                    //Schick
+                    client1.con();
 
+                    try {
+                        client1.serverAntwort = client1.stringInput.readLine();
 
+                        if (client1.serverAntwort.equals(Instruction.ACK.toString())) {
 
+                            System.out.println(client1.serverAntwort);
+                            ergebnis.append(client1.serverAntwort);
 
-
-                /** JFileChooser jFileChooser = new JFileChooser();
-                 jFileChooser.setDialogTitle("Choose a file to download!!");
-
-                 if(jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
-                 fileToSend[0] = jFileChooser.getSelectedFile();
-                 jlTitel.setText("The file you want to download is: " + fileToSend[0].getName());
-                 }*/
+                            jbAbbauen.setEnabled(true);
+                            jpButton2.setVisible(true);
+                            jpText2.setVisible(true);
+                            jbLed.setVisible(true);
+                        } else {
+                            System.out.println(client1.serverAntwort);
+                            ergebnis.append(client1.serverAntwort);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
-        jbList.addActionListener(e -> {
-            JFrame listframe = new JFrame("Liste of Files!!");
 
-            listframe.setSize(300,300);
-            listframe.setLayout(new BoxLayout(listframe.getContentPane(),BoxLayout.Y_AXIS));
+        jbAbbauen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    //Schick DSC
+                    client1.disconnect();
 
-            JLabel jlistTitel = new JLabel("Liste of all Files!!");
-            jlistTitel.setFont(new Font("Arial",Font.BOLD,20));
-            jlistTitel.setBorder(new EmptyBorder(18,0,8,0));
-            jlistTitel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    // Bekomme DSC
+                    System.out.println("je suis off");
+                    ergebnis.setText(client1.stringInput.readLine());
+                    jbAbbauen.setEnabled(false);
+                    jbDel.setEnabled(false);
+                    jbGet.setEnabled(false);
+                    jbPut.setEnabled(false);
+                    jbList.setEnabled(false);
+                    jbLed.setBackground(Color.red);
 
-            JPanel jPanel = new JPanel();
-            jPanel.setBorder(new EmptyBorder(75,0,10,0));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-            JButton jList = new JButton("BACK");
-            jList.setPreferredSize(new Dimension(80,35));
-            jList.setFont(new Font("Arial",Font.BOLD,10));
-
-            jPanel.add(jList);
-
-            listframe.add(jlistTitel);
-            listframe.add(jPanel);
-            listframe.setVisible(true);
-
-
+            }
         });
+
+
+        jbList.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                // to Do
+            }
+        });
+
 
         jbPut.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame putframe = new JFrame("Add a File!!");
+            public void actionPerformed(ActionEvent actionEvent) {
 
-                putframe.setSize(300,300);
-                putframe.setLayout(new BoxLayout(putframe.getContentPane(),BoxLayout.Y_AXIS));
+                // to Do
 
-                JLabel jputTitel = new JLabel("Give the name of the File");
-                jputTitel.setFont(new Font("Arial",Font.BOLD,20));
-                jputTitel.setBorder(new EmptyBorder(18,0,8,0));
-                jputTitel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            }
+        });
 
-                JPanel jPanel = new JPanel();
-                jPanel.setBorder(new EmptyBorder(75,0,10,0));
 
-                JButton jList = new JButton("ADD");
-                jList.setPreferredSize(new Dimension(80,35));
-                jList.setFont(new Font("Arial",Font.BOLD,10));
 
-                jPanel.add(jList);
+        jbGet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
 
-                putframe.add(jputTitel);
-                putframe.add(jPanel);
-                putframe.setVisible(true);
+                // to Do
             }
         });
 
         jbDel.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame delframe = new JFrame("Delete a File!!");
+            public void actionPerformed(ActionEvent actionEvent) {
 
-                delframe.setSize(300,300);
-                delframe.setLayout(new BoxLayout(delframe.getContentPane(),BoxLayout.Y_AXIS));
+                // to Do
 
-                JLabel jdelTitel = new JLabel("Give the name of the File");
-                jdelTitel.setFont(new Font("Arial",Font.BOLD,20));
-                jdelTitel.setBorder(new EmptyBorder(18,0,8,0));
-                jdelTitel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-                JPanel jPanel = new JPanel();
-                jPanel.setBorder(new EmptyBorder(75,0,10,0));
-
-                JButton jList = new JButton("ADD");
-                jList.setPreferredSize(new Dimension(80,35));
-                jList.setFont(new Font("Arial",Font.BOLD,10));
-
-                jPanel.add(jList);
-
-                delframe.add(jdelTitel);
-                delframe.add(jPanel);
-                delframe.setVisible(true);
             }
         });
 
-        JPanel jpCopyRight = new JPanel();
-        JLabel nichtsLabel = new JLabel("@Copyright Constantin & Cedric" ,JLabel.CENTER);
-
-        jpCopyRight.add(nichtsLabel);
-        jframe.add(jlTitel);
-        jframe.add(jpButton1);
-        jframe.add(jpButton2);
-        jframe.add(jpCopyRight);
-        jframe.setVisible(true);
+    }
 
 
 
-
-
-
-
+    public static void main(String[] args) throws UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(new NimbusLookAndFeel());
+        ClientGui guiClient = new ClientGui();
 
     }
 }
