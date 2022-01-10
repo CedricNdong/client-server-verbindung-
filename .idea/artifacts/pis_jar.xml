@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="pis:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/pis_jar</output-path>
+    <root id="archive" name="pishue2.jar">
+      <element id="module-output" name="pishue2" />
+      <element id="dir-copy" path="$USER_HOME$/IdeaProjects/pishue1/src/pis/hue1" />
+      <element id="dir-copy" path="$USER_HOME$/IdeaProjects/pishue1/Javadoc" />
+    </root>
+  </artifact>
+</component>

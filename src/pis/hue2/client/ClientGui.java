@@ -154,9 +154,9 @@ public class ClientGui {
         jframeClient.setVisible(true);
 
 
-
-
-
+        /**
+         *JbAufbauen Button erlaubt die Verbindung des Clients mit dem Server
+         */
         jbAufbauen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -188,7 +188,9 @@ public class ClientGui {
             }
         });
 
-
+        /**
+         *JbAubbauen Button stoppt die Verbindung des Clients mit dem Server
+         */
         jbAbbauen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -213,7 +215,9 @@ public class ClientGui {
             }
         });
 
-
+        /**
+         *JbList Button erlaubt das Anzeigen und Auflisten aller vorhandenen Dateien
+         */
         jbList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -246,7 +250,9 @@ public class ClientGui {
             }
         });
 
-
+        /**
+         *JbPut Button erlaubt das Hochladen von der eingebenen Name von Datei in das Server
+         */
         jbPut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -281,7 +287,9 @@ public class ClientGui {
         });
 
 
-
+/**
+ *JbGet Button erlaubt das Herunterladen von der eingebenen Name von Datei aus dem  Server
+ */
         jbGet.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -317,7 +325,9 @@ public class ClientGui {
                 }
             }
         });
-
+/**
+ *JbDel Button erlaubt das Loeschen von der eingebenen Name von Datei aus dem Server
+ */
         jbDel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
