@@ -11,13 +11,35 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Diese Server-Klasse is in der Lage, auf alle Anforderungen einer Client zu reagieren bzw. zu erfuellen
+ * Sie ist dafuer zustaendig, durch Unterthreads die Anzahl aller erlaubten Client zu entscheiden,
+ * wobei hier nur 3 Clients erlaubt sind
+ * Als Parameter wird der Port des Servers gefordert
+ *
+ * @author Constantin Nshuti und Cedrick
+ */
 public class LaunchServer {
+    /**
+     * Server socket, ueber welcher die Verbindung laeuft
+     */
     private ServerSocket serverSocket;
+    /**
+     * Der Socket, an welchen der Client sich verbinden wird
+     */
     private Socket clientSocket;
+    /**
+     * Maximale Anzahl der erlaubten Clients
+     */
     private int maxAnzahlClient = 3;
+    /**
+     * List von allen vorhanden Dateien in dem Server
+     */
     private List<String> listeAlleDatein = new ArrayList<String>();
 
-    //
+    /**
+     * @param portNummer Port des Servers
+     */
     public void serverLaufen(int portNummer) {
         try {
             serverSocket = new ServerSocket(portNummer);
@@ -56,6 +78,10 @@ public class LaunchServer {
         server.serverLaufen(5678);
     }
 
+    /**
+     * Der ClientThread-Klasse pusht einen Client in die neue SocketThread
+     * und warten auf eine Socket sich zu verbinden
+     */
     public class ClientThread extends Thread {
 
         private Socket clientSocket;
@@ -68,7 +94,11 @@ public class LaunchServer {
             this.clientSocket = clientSocket;
 
         }
-
+        /**
+         * Server starten und warten auf den Client
+         * solange der Client sich verbindet ist, ueberprueft der Server der Client zulaessig ist,
+         * falls ja, gibt ihn eine Rueckmeldung mit CON ansonsten mit DND
+         */
 
         @Override
         public void run() {
@@ -193,11 +223,13 @@ public class LaunchServer {
 
             } catch (Exception exception) {
                 System.out.println(exception);
-                System.exit(1);
+                //System.exit(1);
             }
         }
 
-
+        /**
+         *Diese Methode sendet eine Rueckmeldung mit ACK
+         */
         public void acknowledgement() {
 
             try {
@@ -207,7 +239,9 @@ public class LaunchServer {
                 System.out.println(e);
             }
         }
-
+        /**
+         *Diese Methode sendet eine Ablehnung mit DND
+         */
         public void denied() {
 
             try {
@@ -218,7 +252,9 @@ public class LaunchServer {
                 System.out.println(e);
             }
         }
-
+        /**
+         *Diese Methode sendet eine Anforderung mit DSC auf das Beenden von Verbindung
+         */
         public void disconnect() {
             try {
                 stringOutput.println(Instruction.DSC.toString());
@@ -227,7 +263,9 @@ public class LaunchServer {
                 System.out.println(e);
             }
         }
-
+        /**
+         *Diese Methode sendet Rueckmeldung mit DAT
+         */
         public void data() {
             try {
                 stringOutput.println(Instruction.DAT.toString());
@@ -238,7 +276,10 @@ public class LaunchServer {
         }
 
 
-
+        /**
+         *Diese Methode ist fuer das Loeschen einer Datei
+         * @param file_name  spezifiziert die Name der Datei
+         */
 
         public void delete(String file_name){
             try {
@@ -252,7 +293,10 @@ public class LaunchServer {
             }
         }
 
-
+        /**
+         *Diese Methode ist fuer das Senden bzw. Hochladen einer Datei
+         * @param fileName  spezifiziert die Name der Datei
+         */
         public void uploadFile(String fileName) throws IOException {
             OutputStream outputStream = clientSocket.getOutputStream();
             File file = new File("./ServerDateien/" + fileName);
@@ -265,7 +309,10 @@ public class LaunchServer {
 
         }
 
-
+        /**
+         *Diese Methode ist fuer den Erhalt bzw. Herunterladen einer Datei
+         * @param fileName spezifiziert die Name der Datei
+         */
         public void downloadFile(String fileName) throws IOException {
             InputStream inputStream = clientSocket.getInputStream();
             FileOutputStream fileOutputStream = new FileOutputStream("./ServerDateien/" + fileName);

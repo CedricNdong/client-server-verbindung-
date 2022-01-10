@@ -11,7 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-
+/**
+ * Eine Klasse die uns als Teil "view" dient.
+ * Damit haben wir das Aussehen aller in dem Server oder Client Klassen vorhandenen Methoden bei ein Interface.
+ * Die Variablen "codec1" und "codec2" sind Klassenattributen mit denen man die Hauptmethoden
+ * "Coder"(kodiere) und "decoder"(dekodiere) bedienbar machen werden.
+ *
+ * @author Constantin Nshuti und Cedrick
+ */
 public class ClientGui {
 
     private LaunchClient client1;
